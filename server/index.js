@@ -59,6 +59,8 @@ app.use("/api/tickets", require("./routes/tickets"));
 app.use("/api/events", require("./routes/events"));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/analytics", require("./routes/analytics"));
+app.use("/api/ai", require("./routes/ai"));
+app.use("/api/admin-messages", require("./routes/adminMessages"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

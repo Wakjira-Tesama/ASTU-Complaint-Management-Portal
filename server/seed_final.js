@@ -18,21 +18,7 @@ const STUDENT_PASS = "Student@1234";
 const ADMIN_PASS = "Admin@1234";
 
 const departments = [
-  { name: "Meron Tadesse",      email: "dormitory@astu.edu",      dept: "Dormitory" },
-  { name: "Yonas Girma",        email: "cafeteria@astu.edu",      dept: "Cafeteria" },
-  { name: "Biniam Kebede",      email: "library@astu.edu",        dept: "Library" },
-  { name: "Selam Desta",        email: "sports@astu.edu",         dept: "Sports Office" },
-  { name: "Hanna Lemma",        email: "health@astu.edu",         dept: "Health Center" },
-  { name: "Tewodros Assefa",    email: "it@astu.edu",             dept: "IT Services" },
-  { name: "Abebe Kasahun",      email: "transport@astu.edu",      dept: "Transportation" },
-  { name: "Almaz Ayana",        email: "eec@astu.edu",            dept: "Electrical Engineering & Computing" },
-  { name: "Mulugeta Seraw",     email: "mcme@astu.edu",           dept: "Mechanical, Chemical & Materials Eng." },
-  { name: "Genet Belay",        email: "civil@astu.edu",          dept: "Civil Engineering and Architecture" },
-  { name: "Dereje Tilahun",     email: "ans@astu.edu",            dept: "Applied Natural Science" },
-  { name: "Aster Kassa",        email: "freshman@astu.edu",       dept: "Division of Freshman Program" },
-  { name: "Kidus Yohannes",     email: "continuing@astu.edu",     dept: "Continuing Educations" },
-  { name: "Hiwot Tesfaye",      email: "postgrad@astu.edu",       dept: "Postgraduate Programs" },
-  { name: "Samuel Hailu",       email: "other@astu.edu",          dept: "Other Services" },
+  
 ];
 
 const students = [

@@ -121,7 +121,7 @@ const Register = () => {
                 <Input
                   id="uid"
                   name="uid"
-                  placeholder="ASTU/1234/12"
+                  placeholder="ugr/12034/12"
                   required
                 />
               </div>
@@ -174,7 +174,7 @@ const Register = () => {
 
             <div className="space-y-2">
               <Label htmlFor="dorm">Dormitory Number</Label>
-              <Input id="dorm" placeholder="Block 5, Room 302" required />
+              <Input id="dorm" placeholder="Block 360, Room 3" required />
             </div>
 
             <div className="space-y-2">

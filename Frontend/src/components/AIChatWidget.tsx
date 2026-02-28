@@ -3,32 +3,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Bot, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { API_BASE_URL } from "@/lib/api";
 
 type Message = { role: "user" | "assistant"; content: string };
 
 const quickReplies = [
+  "I lost my ID card",
+  "Cafeteria issues",
+  "How to contact Registrar?",
   "How do I submit a complaint?",
-  "What's the status of my ticket?",
-  "How long does resolution take?",
-  "Who handles dormitory issues?",
 ];
-
-const getAIResponse = (msg: string): string => {
-  const lower = msg.toLowerCase();
-  if (lower.includes("submit") || lower.includes("complaint") || lower.includes("new"))
-    return "To submit a complaint:\n1. Go to **My Complaints** from the sidebar\n2. Click **New Complaint**\n3. Select the department category\n4. Describe your issue in detail\n5. Click Submit\n\nYour complaint will be automatically routed to the right department!";
-  if (lower.includes("status") || lower.includes("track"))
-    return "You can track your complaints in **My Complaints** page. Each ticket shows its current status:\n- **Pending**: Awaiting staff review\n- **In Progress**: Being addressed\n- **Resolved**: Issue fixed\n- **Rejected**: Cannot be addressed";
-  if (lower.includes("long") || lower.includes("time") || lower.includes("resolution"))
-    return "Average resolution time is **2.3 days**. Urgent issues like water or electricity are typically resolved within **24 hours**. Academic complaints may take **3-5 days** depending on complexity.";
-  if (lower.includes("dormitory") || lower.includes("dorm"))
-    return "Dormitory issues (water, electricity, room repairs) are handled by **Dormitory Staff**. They receive your complaint automatically when you select 'Dormitory' as the category. Current dormitory staff: Meron Tadesse.";
-  if (lower.includes("cafeteria") || lower.includes("food"))
-    return "Cafeteria complaints are managed by **Cafeteria Staff**. Common issues include food quality, hygiene, and menu variety. Select 'Cafeteria' when submitting your complaint.";
-  if (lower.includes("hello") || lower.includes("hi") || lower.includes("hey"))
-    return "Hello! 👋 I'm your ASTU AI assistant. I can help you with:\n- Submitting complaints\n- Tracking ticket status\n- Understanding the complaint process\n- General university service questions\n\nHow can I help you today?";
-  return "I can help you with complaint submission, tracking, and university services. Try asking about:\n- How to submit a complaint\n- Tracking your ticket status\n- Resolution timelines\n- Department-specific questions";
-};
 
 const AIChatWidget = () => {
   const [open, setOpen] = useState(false);
@@ -43,18 +27,37 @@ const AIChatWidget = () => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages, isTyping]);
 
-  const handleSend = (text?: string) => {
+  const handleSend = async (text?: string) => {
     const msg = text || input;
     if (!msg.trim()) return;
+    
+    // Optimistically add user message
     setMessages((prev) => [...prev, { role: "user", content: msg }]);
     setInput("");
     setIsTyping(true);
 
-    setTimeout(() => {
-      const response = getAIResponse(msg);
-      setMessages((prev) => [...prev, { role: "assistant", content: response }]);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${API_BASE_URL}/api/ai/query`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ message: msg })
+      });
+      
+      const data = await res.json();
+      setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
+    } catch (error) {
+      console.error("AI Assistant Error:", error);
+      setMessages((prev) => [
+        ...prev, 
+        { role: "assistant", content: "I'm sorry, I'm having trouble connecting to the server right now. Please try again later." }
+      ]);
+    } finally {
       setIsTyping(false);
-    }, 800 + Math.random() * 700);
+    }
   };
 
   return (

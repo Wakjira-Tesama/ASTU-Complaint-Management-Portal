@@ -1,0 +1,32 @@
+
+> vite_react_shadcn_ts@0.0.0 build
+> vite build
+
+[36mvite v5.4.19 [32mbuilding for production...[36m[39m
+transforming...
+Browserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[32m✓[39m 2945 modules transformed.
+[31mx[39m Build failed in 20.68s
+[31merror during build:
+[31msrc/components/AIChatWidget.tsx (6:7): "default" is not exported by "src/lib/api.ts", imported by "src/components/AIChatWidget.tsx".[31m
+file: [36mC:/Users/Wak/OneDrive/Desktop/MyProjects/ASTU-Complaint-Management-Porta/Frontend/src/components/AIChatWidget.tsx:6:7[31m
+[33m
+4: import { Button } from "@/components/ui/button";
+5: import { Input } from "@/components/ui/input";
+6: import API_BASE_URL from "@/lib/api";
+          ^
+7: 
+8: type Message = { role: "user" | "assistant"; content: string };
+[31m
+    at getRollupError (file:///C:/Users/Wak/OneDrive/Desktop/MyProjects/ASTU-Complaint-Management-Porta/Frontend/node_modules/rollup/dist/es/shared/parseAst.js:395:41)
+    at error (file:///C:/Users/Wak/OneDrive/Desktop/MyProjects/ASTU-Complaint-Management-Porta/Frontend/node_modules/rollup/dist/es/shared/parseAst.js:391:42)
+    at Module.error (file:///C:/Users/Wak/OneDrive/Desktop/MyProjects/ASTU-Complaint-Management-Porta/Frontend/node_modules/rollup/dist/es/shared/node-entry.js:15535:16)
+    at Module.traceVariable (file:///C:/Users/Wak/OneDrive/Desktop/MyProjects/ASTU-Complaint-Management-Porta/Frontend/node_modules/rollup/dist/es/shared/node-entry.js:15984:29)
+    at ModuleScope.findVariable (file:///C:/Users/Wak/OneDrive/Desktop/MyProjects/ASTU-Complaint-Management-Porta/Frontend/node_modules/rollup/dist/es/shared/node-entry.js:13770:39)
+    at ReturnValueScope.findVariable (file:///C:/Users/Wak/OneDrive/Desktop/MyProjects/ASTU-Complaint-Management-Porta/Frontend/node_modules/rollup/dist/es/shared/node-entry.js:5252:38)
+    at FunctionBodyScope.findVariable (file:///C:/Users/Wak/OneDrive/Desktop/MyProjects/ASTU-Complaint-Management-Porta/Frontend/node_modules/rollup/dist/es/shared/node-entry.js:5252:38)
+    at ReturnValueScope.findVariable (file:///C:/Users/Wak/OneDrive/Desktop/MyProjects/ASTU-Complaint-Management-Porta/Frontend/node_modules/rollup/dist/es/shared/node-entry.js:5252:38)
+    at FunctionBodyScope.findVariable (file:///C:/Users/Wak/OneDrive/Desktop/MyProjects/ASTU-Complaint-Management-Porta/Frontend/node_modules/rollup/dist/es/shared/node-entry.js:5252:38)
+    at BlockScope.findVariable (file:///C:/Users/Wak/OneDrive/Desktop/MyProjects/ASTU-Complaint-Management-Porta/Frontend/node_modules/rollup/dist/es/shared/node-entry.js:5252:38)[39m

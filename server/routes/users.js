@@ -55,6 +55,12 @@ router.post("/staff", auth, async (req, res) => {
 
     const { name, email, password, department } = req.body;
     
+    // Enforce one staff per department
+    const existingStaffForDept = await User.findOne({ role: "staff", department });
+    if (existingStaffForDept) {
+      return res.status(400).json({ message: `A staff member for the ${department} department already exists` });
+    }
+
     const existing = await User.findOne({ email });
     if (existing) return res.status(400).json({ message: "User already exists" });
 
