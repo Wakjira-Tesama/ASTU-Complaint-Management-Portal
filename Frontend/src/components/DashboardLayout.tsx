@@ -24,7 +24,6 @@ const navItems = {
   student: [
     { icon: LayoutDashboard, label: "Dashboard", path: "/student" },
     { icon: MessageSquare, label: "My Complaints", path: "/student/complaints" },
-    { icon: Bell, label: "Announcements", path: "/student/announcements" },
     { icon: Megaphone, label: "Announcement Board", path: "/student/board" },
     { icon: Settings, label: "Profile", path: "/student/profile" },
   ],
