@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { API_BASE_URL } from "@/lib/api";
 
 interface Club {
   _id: string;
@@ -29,7 +30,7 @@ const AdminClubs = () => {
 
   const fetchClubs = async () => {
     try {
-      const res = await fetch("/api/clubs", {
+      const res = await fetch(`${API_BASE_URL}/api/clubs`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       const data = await res.json();
@@ -51,7 +52,7 @@ const AdminClubs = () => {
       return;
     }
     try {
-      const res = await fetch("/api/clubs", {
+      const res = await fetch(`${API_BASE_URL}/api/clubs`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +72,7 @@ const AdminClubs = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/clubs/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/clubs/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
@@ -87,7 +88,7 @@ const AdminClubs = () => {
   const toggleStatus = async (id: string, currentStatus: string) => {
     const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
     try {
-      const res = await fetch(`/api/clubs/${id}/status`, {
+      const res = await fetch(`${API_BASE_URL}/api/clubs/${id}/status`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
