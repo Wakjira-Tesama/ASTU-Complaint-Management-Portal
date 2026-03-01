@@ -22,15 +22,43 @@ router.post("/", auth, async (req, res) => {
       return res.status(403).json({ message: "Students cannot post announcements" });
     }
 
-    const { title, content } = req.body;
+    const { title, content, tags } = req.body;
     const announcement = new Announcement({ 
       title, 
       content, 
+      tags,
       createdBy: req.user.id 
     });
     
     await announcement.save();
     res.status(201).json(announcement);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Delete announcement (admin/staff only)
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    if (req.user.role === "student") {
+      return res.status(403).json({ message: "Students cannot delete announcements" });
+    }
+    const announcement = await Announcement.findByIdAndDelete(req.params.id);
+    if (!announcement) return res.status(404).json({ message: "Announcement not found" });
+    res.json({ message: "Announcement deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Update announcement to support tags field
+router.patch("/:id", auth, async (req, res) => {
+  try {
+    if (req.user.role === "student") {
+      return res.status(403).json({ message: "Students cannot edit announcements" });
+    }
+    const updated = await Announcement.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updated);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

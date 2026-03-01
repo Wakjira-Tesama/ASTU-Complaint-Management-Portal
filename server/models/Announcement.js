@@ -8,6 +8,7 @@ const AnnouncementSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  tags: [{ type: String }],
   createdAt: { type: Date, default: Date.now },
 });
 

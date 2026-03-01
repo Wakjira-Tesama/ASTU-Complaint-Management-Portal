@@ -68,4 +68,31 @@ router.patch("/:id", auth, async (req, res) => {
   }
 });
 
+// Add message to complaint (conversation)
+router.post("/:id/messages", auth, async (req, res) => {
+  try {
+    const { text } = req.body;
+    const { role } = req.user;
+    
+    // Get sender name
+    const user = await User.findById(req.user.id);
+    const senderName = user ? user.name : "Unknown";
+
+    const complaint = await Complaint.findById(req.params.id);
+    if (!complaint) return res.status(404).json({ message: "Complaint not found" });
+
+    complaint.messages.push({
+      sender: role === "student" ? "student" : "staff",
+      senderName,
+      text,
+      createdAt: Date.now()
+    });
+
+    await complaint.save();
+    res.status(201).json(complaint);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;

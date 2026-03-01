@@ -36,6 +36,7 @@ const AdminLogin = () => {
         return;
       }
       localStorage.setItem("token", data.token);
+      localStorage.setItem("userRole", data.user.role);
       window.location.href = "/admin";
     } catch (err) {
       setError("Network error");

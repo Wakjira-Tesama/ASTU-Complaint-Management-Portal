@@ -36,6 +36,7 @@ const StaffLogin = () => {
         return;
       }
       localStorage.setItem("token", data.token);
+      localStorage.setItem("userRole", data.user.role);
       window.location.href = "/staff";
     } catch (err) {
       setError("Network error");

@@ -14,6 +14,14 @@ const ComplaintSchema = new mongoose.Schema({
     required: true,
   },
   department: { type: String, required: true },
+  messages: [
+    {
+      sender: { type: String, enum: ["student", "staff"], required: true },
+      senderName: String,
+      text: { type: String, required: true },
+      createdAt: { type: Date, default: Date.now },
+    },
+  ],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

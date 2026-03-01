@@ -5,38 +5,80 @@ import { Plus, Clock, CheckCircle2, AlertCircle, MessageSquare } from "lucide-re
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-const stats = [
-  { label: "Total Complaints", value: "12", icon: MessageSquare, color: "text-info" },
-  { label: "Pending", value: "3", icon: Clock, color: "text-warning" },
-  { label: "Resolved", value: "8", icon: CheckCircle2, color: "text-success" },
-  { label: "Rejected", value: "1", icon: AlertCircle, color: "text-destructive" },
-];
-
-const recentComplaints = [
-  { id: "T-1042", title: "Water supply issue in Block 5", department: "Dormitory", status: "Pending", date: "Feb 25, 2026" },
-  { id: "T-1038", title: "Broken projector in Room 204", department: "Academic", status: "In Progress", date: "Feb 23, 2026" },
-  { id: "T-1035", title: "Cafeteria food quality concern", department: "Cafeteria", status: "Resolved", date: "Feb 20, 2026" },
-  { id: "T-1029", title: "Library hours extension request", department: "Library", status: "Resolved", date: "Feb 18, 2026" },
-];
-
-const statusVariant = (status: string) => {
-  switch (status) {
-    case "Resolved": return "default";
-    case "In Progress": return "secondary";
-    case "Pending": return "outline";
-    case "Rejected": return "destructive";
-    default: return "outline";
-  }
+const iconMap: Record<string, any> = {
+  MessageSquare,
+  Clock,
+  CheckCircle2,
+  AlertCircle
 };
 
+import { API_BASE_URL } from "../lib/api";
+
 const StudentDashboard = () => {
+  const [stats, setStats] = useState<any[]>([]);
+  const [recent, setRecent] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [userName, setUserName] = useState("Student");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const headers = { Authorization: `Bearer ${localStorage.getItem("token")}` };
+        const [complaintsRes, userRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/api/complaints`, { headers }),
+          fetch(`${API_BASE_URL}/api/auth/me`, { headers }).catch(() => null)
+        ]);
+
+        const complaints = await complaintsRes.json();
+        if (complaintsRes.ok) {
+          // Calculate stats locally for student (or create a student analytics endpoint)
+          const total = complaints.length;
+          const pending = complaints.filter((c: any) => c.status === "pending").length;
+          const resolved = complaints.filter((c: any) => c.status === "resolved").length;
+          const rejected = complaints.filter((c: any) => c.status === "rejected").length;
+
+          const statsData = [
+            { label: "Total Complaints", value: total.toString(), icon: MessageSquare, color: "text-info" },
+            { label: "Pending", value: pending.toString(), icon: Clock, color: "text-warning" },
+            { label: "Resolved", value: resolved.toString(), icon: CheckCircle2, color: "text-success" },
+            { label: "Rejected", value: rejected.toString(), icon: AlertCircle, color: "text-destructive" },
+          ];
+          setStats(statsData as any);
+          setRecent(complaints.slice(0, 4));
+        }
+
+        // Try to get name from localStorage as fallback
+        const userData = JSON.parse(localStorage.getItem("user") || "{}");
+        if (userData.name) setUserName(userData.name.split(" ")[0]);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const statusVariant = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "resolved": return "default";
+      case "in_progress": return "secondary";
+      case "pending": return "outline";
+      case "rejected": return "destructive";
+      default: return "outline";
+    }
+  };
+
+  if (loading) return <DashboardLayout role="student"><div className="p-10 text-center">Loading dashboard...</div></DashboardLayout>;
+
   return (
     <DashboardLayout role="student">
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-display font-bold">Welcome, Abebe</h1>
+            <h1 className="text-2xl font-display font-bold">Welcome, {userName}</h1>
             <p className="text-sm text-muted-foreground">Track and manage your complaints</p>
           </div>
           <Link to="/student/complaints">
@@ -66,21 +108,22 @@ const StudentDashboard = () => {
             <h2 className="font-display font-bold">Recent Complaints</h2>
           </div>
           <div className="divide-y divide-border">
-            {recentComplaints.map((c) => (
-              <div key={c.id} className="p-5 flex items-center justify-between hover:bg-muted/30 transition-colors">
+            {recent.map((c) => (
+              <div key={c._id} className="p-5 flex items-center justify-between hover:bg-muted/30 transition-colors">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-mono text-muted-foreground">{c.id}</span>
-                    <Badge variant={statusVariant(c.status) as any}>{c.status}</Badge>
+                    <span className="text-[10px] font-mono text-muted-foreground uppercase">{c._id.slice(-6)}</span>
+                    <Badge variant={statusVariant(c.status) as any}>{c.status.replace("_", " ")}</Badge>
                   </div>
                   <p className="font-medium text-sm">{c.title}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{c.department} · {c.date}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{c.department} · {new Date(c.createdAt).toLocaleDateString()}</p>
                 </div>
                 <Link to="/student/complaints">
                   <Button variant="ghost" size="sm">View</Button>
                 </Link>
               </div>
             ))}
+            {recent.length === 0 && <div className="p-10 text-center text-muted-foreground">You haven't submitted any complaints yet</div>}
           </div>
         </div>
       </motion.div>

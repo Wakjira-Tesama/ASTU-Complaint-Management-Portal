@@ -31,6 +31,7 @@ const navItems = {
   staff: [
     { icon: LayoutDashboard, label: "Dashboard", path: "/staff" },
     { icon: MessageSquare, label: "Tickets", path: "/staff/tickets" },
+    { icon: Megaphone, label: "Announcements", path: "/staff/announcements" },
     { icon: Calendar, label: "Events", path: "/staff/events" },
     { icon: Settings, label: "Profile", path: "/staff/profile" },
   ],
