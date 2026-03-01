@@ -6,6 +6,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, LineChart, Line,
 } from "recharts";
+import { API_BASE_URL } from "@/lib/api";
 
 const iconMap: Record<string, any> = {
   TrendingUp,
@@ -25,7 +26,7 @@ const AdminAnalytics = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/api/analytics/admin", {
+        const res = await fetch(`${API_BASE_URL}/api/analytics/admin`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
         const json = await res.json();

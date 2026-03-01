@@ -82,7 +82,7 @@ const StudentComplaints = () => {
     }
     
     try {
-      const res = await fetch("/api/complaints", {
+      const res = await fetch(`${API_BASE_URL}/api/complaints`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,7 +114,7 @@ const StudentComplaints = () => {
     if (!message.trim() || !selectedComplaint) return;
 
     try {
-      const res = await fetch(`/api/complaints/${selectedComplaint._id}/messages`, {
+      const res = await fetch(`${API_BASE_URL}/api/complaints/${selectedComplaint._id}/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
