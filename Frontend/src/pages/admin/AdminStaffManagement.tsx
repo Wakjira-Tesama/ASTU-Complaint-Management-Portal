@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { API_BASE_URL } from "@/lib/api";
 
 const departments = [
   "Dormitory", "Cafeteria", "Library", "Sports Office", "Health Center", "IT Services", "Transportation",
@@ -28,7 +29,7 @@ const AdminStaffManagement = () => {
 
   const fetchStaff = async () => {
     try {
-      const res = await fetch("/api/users/staff", {
+      const res = await fetch(`${API_BASE_URL}/api/users/staff`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
@@ -58,7 +59,7 @@ const AdminStaffManagement = () => {
     }
     
     try {
-      const res = await fetch("/api/users/staff", {
+      const res = await fetch(`${API_BASE_URL}/api/users/staff`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,7 +88,7 @@ const AdminStaffManagement = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/users/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/users/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { API_BASE_URL } from "@/lib/api";
 
 const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +20,7 @@ const AdminLogin = () => {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

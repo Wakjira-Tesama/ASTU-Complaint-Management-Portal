@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { API_BASE_URL } from "@/lib/api";
 
 const AdminComplaints = () => {
   const [complaints, setComplaints] = useState<any[]>([]);
@@ -16,7 +17,7 @@ const AdminComplaints = () => {
 
   const fetchComplaints = async () => {
     try {
-      const res = await fetch("/api/complaints", {
+      const res = await fetch(`${API_BASE_URL}/api/complaints`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       const data = await res.json();

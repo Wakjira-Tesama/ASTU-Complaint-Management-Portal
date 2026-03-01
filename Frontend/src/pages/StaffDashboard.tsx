@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { API_BASE_URL } from "@/lib/api";
 
 const iconMap: Record<string, any> = {
   MessageSquare,
@@ -24,8 +25,8 @@ const StaffDashboard = () => {
     try {
       const headers = { Authorization: `Bearer ${localStorage.getItem("token")}` };
       const [statsRes, ticketsRes] = await Promise.all([
-        fetch("/api/analytics/staff", { headers }),
-        fetch("/api/complaints", { headers })
+        fetch(`${API_BASE_URL}/api/analytics/staff`, { headers }),
+        fetch(`${API_BASE_URL}/api/complaints`, { headers })
       ]);
 
       const statsData = await statsRes.json();
@@ -51,7 +52,7 @@ const StaffDashboard = () => {
 
   const handleStatusUpdate = async (id: string, newStatus: string) => {
     try {
-      const res = await fetch(`/api/complaints/${id}/status`, {
+      const res = await fetch(`${API_BASE_URL}/api/complaints/${id}/status`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
