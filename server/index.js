@@ -1,24 +1,46 @@
-require("dotenv").config({ path: __dirname + "/.env" });
+// Load environment variables
+require("dotenv").config(); 
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
 
+// Error logging for environment variables
+if (!process.env.MONGO_URI) {
+  console.error("❌ CRITICAL ERROR: MONGO_URI is not defined in environment variables!");
+  process.exit(1);
+}
+
+if (!process.env.JWT_SECRET) {
+  console.warn("⚠️ WARNING: JWT_SECRET is not defined. Authentication will fail.");
+}
+
 // CORS configuration
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:8080",
+  origin: process.env.FRONTEND_URL || "*", // Allow all in dev/production if not specified
   credentials: true,
 };
 app.use(cors(corsOptions));
 app.use(express.json());
 
 // MongoDB connection
+console.log("⏳ Connecting to MongoDB...");
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected successfully"))
   .catch((err) => {
-    console.error("❌ MongoDB connection error:", err.message);
+    console.error("❌ MongoDB connection error detail:");
+    console.error("   Error Name:", err.name);
+    console.error("   Error Message:", err.message);
+    console.error("   Error Code:", err.code);
+    if (err.message.includes("authentication failed")) {
+      console.error("   👉 Tip: Double check your database password. Remember to use %40 for @.");
+    }
+    if (err.message.includes("ETIMEDOUT") || err.message.includes("whitelist")) {
+      console.error("   👉 Tip: Check your MongoDB Atlas IP Whitelist (set to 0.0.0.0/0).");
+    }
     process.exit(1);
   });
 
