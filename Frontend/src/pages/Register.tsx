@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/select";
 import { Upload, Eye, EyeOff } from "lucide-react";
 
+import { API_BASE_URL } from "@/lib/api";
+
 const departments = [
   "Computer Science",
   "Electrical Engineering",
@@ -43,7 +45,7 @@ const Register = () => {
     formData.append("password", (form.password as any).value);
     if (idFile) formData.append("idCard", idFile);
     try {
-      const res = await fetch("/api/auth/register", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: "POST",
         body: formData,
       });
